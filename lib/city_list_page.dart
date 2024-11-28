@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:myapp/env.dart';
 
+import 'city.dart';
 import 'city_detail_page.dart';
 import 'package:http/http.dart' as http;
 
@@ -46,12 +47,13 @@ class _CityListPageState extends State<CityListPage> {
             }
             final json = jsonDecode(snapshot.data!)['result'] as List;
             final items = json.cast<Map<String, dynamic>>();
+            final cities = items.map((item) => City.fromJson(item)).toList();
             return ListView.builder(
-              itemCount: items.length,
+              itemCount: cities.length,
               itemBuilder: (context, index) {
-                final city = items[index];
+                final city = cities[index];
                 return ListTile(
-                  title: Text(city['cityName']),
+                  title: Text(city.cityName),
                   subtitle: const Text(
                       '政令指定都市'), // This is fine as it's a constant string
                   trailing: const Icon(Icons.navigate_next),
@@ -59,7 +61,7 @@ class _CityListPageState extends State<CityListPage> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => CityDetailPage(
-                          city: city['cityName'],
+                          city: city.cityName,
                         ),
                       ),
                     );
