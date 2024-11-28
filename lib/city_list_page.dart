@@ -59,25 +59,26 @@ class _CityListPageState extends State<CityListPage> {
             }
             final json = jsonDecode(snapshot.data!)['result'] as List;
             final items = json.cast<Map<String, dynamic>>();
-            return ListView(
-              children: [
-                for (final city in items)
-                  ListTile(
-                    title: Text(city['cityName']),
-                    subtitle: const Text(
-                        '政令指定都市'), // This is fine as it's a constant string
-                    trailing: const Icon(Icons.navigate_next),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => CityDetailPage(
-                            city: city['cityName'],
-                          ),
+            return ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final city = items[index];
+                return ListTile(
+                  title: Text(city['cityName']),
+                  subtitle: const Text(
+                      '政令指定都市'), // This is fine as it's a constant string
+                  trailing: const Icon(Icons.navigate_next),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CityDetailPage(
+                          city: city['cityName'],
                         ),
-                      );
-                    },
-                  ),
-              ],
+                      ),
+                    );
+                  },
+                );
+              },
             );
           }),
     );
