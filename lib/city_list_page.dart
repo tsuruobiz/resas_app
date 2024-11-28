@@ -32,19 +32,6 @@ class _CityListPageState extends State<CityListPage> {
 
   @override
   Widget build(BuildContext context) {
-    const cities = [
-      '札幌市',
-      '横浜市',
-      '川崎市',
-      '相模原市',
-      '仙台市',
-      'さいたま市',
-      '千葉市',
-      '静岡市',
-      '浜松市',
-      '北九州市',
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('市区町村一覧'),
