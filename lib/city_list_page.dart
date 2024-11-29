@@ -26,8 +26,11 @@ class _CityListPageState extends State<CityListPage> {
     const host = 'opendata.resas-portal.go.jp';
     const endopoint = 'api/v1/cities';
     final headers = {'X-API-KEY': Env.resasApiKey};
+    final param = {
+      'prefCode': '14',
+    };
     _future = http
-        .get(Uri.https(host, endopoint), headers: headers)
+        .get(Uri.https(host, endopoint, param), headers: headers)
         .then((res) => res.body);
   }
 
