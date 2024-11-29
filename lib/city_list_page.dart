@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/centered_circular_progress_indicator.dart';
 import 'package:myapp/env.dart';
 
 import 'city.dart';
@@ -44,9 +45,7 @@ class _CityListPageState extends State<CityListPage> {
           future: _future,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const CenteredCircularProgressIndicator();
             }
             final json = jsonDecode(snapshot.data!)['result'] as List;
             final items = json.cast<Map<String, dynamic>>();

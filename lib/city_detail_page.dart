@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:myapp/annual_municipality_tax.dart';
+import 'package:myapp/centered_circular_progress_indicator.dart';
 import 'package:myapp/city.dart';
 
 import 'env.dart';
@@ -62,7 +63,7 @@ class _CityDetailPageState extends State<CityDetailPage> {
               future: _future,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const CenteredCircularProgressIndicator();
                 }
                 final result = jsonDecode(snapshot.data!)['result']
                     as Map<String, dynamic>;
@@ -81,12 +82,8 @@ class _CityDetailPageState extends State<CityDetailPage> {
                   itemBuilder: (context, index) {
                     final tax = taxes[index];
                     return ListTile(
-                      title: Text('${tax.year}年'),
-                      trailing: Text(
-                        _formatTaxLabel(tax.value),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    );
+                        title: Text('${tax.year}年'),
+                        trailing: _FormattedTaxText(tax: tax.value));
                   },
                 );
               },
@@ -96,13 +93,33 @@ class _CityDetailPageState extends State<CityDetailPage> {
       ),
     );
   }
+}
+
+// 地方税の表示をフォーマットするためのWidget
+// StatelessWidgetとして定義することで、buildメソッドのみを持つシンプルなコンポーネントになります。
+// このWidgetは、地方税の金額を受け取り、それをフォーマットして表示する役割を担います。
+class _FormattedTaxText extends StatelessWidget {
+  const _FormattedTaxText({
+    required this.tax,
+  });
+
+  final int tax;
+
+  @override
+  Widget build(BuildContext context) {
+    // 地方税の金額をフォーマットしてText Widgetで表示します。
+    return Text(
+      _formatTaxLabel(tax),
+      style: Theme.of(context).textTheme.bodyLarge,
+    );
+  }
 
   /// 地方税の金額をフォーマットして表示する
-  ///
-  /// [value] 地方税の金額（単位：千円）
-  /// [return] フォーマットされた地方税の文字列（例：1,234,567円）
-  String _formatTaxLabel(int value) {
-    final formatted = NumberFormat('#,###').format(value * 1000);
+  /// [tax] 地方税の金額（単位：千円）
+  /// returns フォーマットされた地方税の文字列（例：1,234,567円）
+  String _formatTaxLabel(int tax) {
+    // NumberFormatを使って金額を3桁区切りでフォーマットします。
+    final formatted = NumberFormat('#,###').format(tax * 1000);
     return '$formatted円';
   }
 }
